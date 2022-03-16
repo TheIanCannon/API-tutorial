@@ -1,6 +1,20 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const {append}=require('express/lib/response');
+const mysql = require('mysql2');
+
+const connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: 'root',
+    database: 'todo'
+});
+
+try{
+    connection.connect();
+} catch (e) {
+    console.log('Connection to MySQL failed');
+    console.log(e);
+}
 
 const api = express();
 

@@ -126,7 +126,7 @@ function addItemToDOM(text, completed) {
 function sendItemToAPI(item){
     let req = new XMLHttpRequest();
     req.open('POST', '/add');
-    req.send(item);
+    req.setRequestHeader('Content-Type', 'application/json');
     req.send(JSON.stringify({item: item}));
 
     req.addEventListener('load', ()=>{
