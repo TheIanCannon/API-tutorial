@@ -17,9 +17,7 @@ try{
 }
 
 const api = express();
-
 api.use(express.static(__dirname + '/public'));
-
 api.use(bodyParser.json());
 
 api.listen(3000, () => {
