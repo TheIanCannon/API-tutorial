@@ -24,15 +24,22 @@ api.listen(3000, () => {
     console.log('API up and running!');
 });
 
+api.get('/tasks', (req,res) => {
+  connection.query('SELECT * FROM tasks ORDER BY created DESC', (error, results) => {
+    if (error) return res.json({ error: error});
+    res.json(results);
+  });
+});
+
 api.post('/add', (req, res)=>{
-    connection.query('INSERT INTO tasks (description) VALUES (?)', [req.body.item], (error, results) => {
-        if (error) return res.json({ error: error});
-        connection.query('SELECT LAST_INSERT_ID() FROM tasks', (error, results) => {
-            if (error) return res.json({ error: error});
-            res.json({
-                id: results[0]['LAST_INSERT_ID()'],
-                description: req.body.item
-            });
+  connection.query('INSERT INTO tasks (description) VALUES (?)', [req.body.item], (error, results) => {
+    if (error) return res.json({ error: error});
+    connection.query('SELECT LAST_INSERT_ID() FROM tasks', (error, results) => {
+      if (error) return res.json({ error: error});
+      res.json({
+        id: results[0]['LAST_INSERT_ID()'],
+        description: req.body.item
         });
     });
+  });
 });
