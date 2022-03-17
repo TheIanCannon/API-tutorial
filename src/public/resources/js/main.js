@@ -62,9 +62,26 @@ function completeItem() {
   let parent = item.parentNode;
   let id = parent.id;
   let value = item.innerText;
+  let taskId = parseInt(item.getAttribute('data-id'));
 
   // Check if the item should be added to the completed list or to re-added to the todo list
   let target = (id === 'todo') ? document.getElementById('completed'):document.getElementById('todo');
+
+  let req = new XMLHttpRequest();
+  req.open('POST', '/tasks/' + taskId + '/update');
+  req.setRequestHeader('Content-Type', 'application/json');
+  req.send(JSON.stringify({completed: (id === 'todo') }));
+
+  req.addEventListener('load', ()=>{
+      let results = JSON.parse(req.responseText);
+      if (results.error) return console.log(results.error);
+      parent.removeChild(item);
+  });
+
+  req.addEventListener('error', ()=>{
+      console.log('An error occured');
+      console.log(e);
+  });  
 
   parent.removeChild(item);
   target.insertBefore(item, target.childNodes[0]);
