@@ -31,7 +31,7 @@ api.get('/tasks', (req,res) => {
   });
 });
 
-api.post('/add', (req, res)=>{
+api.post('/tasks/add', (req, res)=>{
   connection.query('INSERT INTO tasks (description) VALUES (?)', [req.body.item], (error, results) => {
     if (error) return res.json({ error: error});
     connection.query('SELECT LAST_INSERT_ID() FROM tasks', (error, results) => {
@@ -41,5 +41,12 @@ api.post('/add', (req, res)=>{
         description: req.body.item
         });
     });
+  });
+});
+
+api.post('/tasks/:id/remove', (req, res) => {
+  connection.query('DELETE FROM tasks WHERE id = ?', [req.params.id], (error, results) => {
+    if (error) return res.json({ error: error});
+    res.json({});
   });
 });
